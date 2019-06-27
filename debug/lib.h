@@ -43,6 +43,11 @@ struct MuttWindow;
 void show_backtrace(void);
 #endif
 
+// Graphviz
+#ifdef USE_DEVEL_GRAPHVIZ
+void dump_graphviz(const char *title);
+#endif
+
 // Notify
 int         debug_notify_observer(struct NotifyCallback *nc);
 const char *get_config_type      (int id);
