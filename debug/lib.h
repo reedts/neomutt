@@ -37,6 +37,8 @@
 #include "config.h"
 #include "core/lib.h"
 
+struct MuttWindow;
+
 #ifdef HAVE_LIBUNWIND
 void show_backtrace(void);
 #endif
@@ -60,5 +62,11 @@ void        notify_dump_mailbox  (struct NotifyCallback *nc);
 
 // Parse Set
 void test_parse_set(void);
+
+// Window
+void        debug_win_dump(void);
+void        win_dump      (struct MuttWindow *win, int indent);
+const char *win_size      (struct MuttWindow *win);
+const char *win_type      (struct MuttWindow *win);
 
 #endif /* MUTT_DEBUG_LIB_H */
