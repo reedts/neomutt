@@ -35,10 +35,28 @@
 #define MUTT_DEBUG_LIB_H
 
 #include "config.h"
+#include "core/lib.h"
 
 #ifdef HAVE_LIBUNWIND
 void show_backtrace(void);
 #endif
+
+// Notify
+int         debug_notify_observer(struct NotifyCallback *nc);
+const char *get_config_type      (int id);
+const char *get_context          (int id);
+const char *get_event_type       (enum NotifyType type);
+const char *get_global_event     (int id);
+const char *get_mailbox_event    (int id);
+const char *get_mailbox_type     (enum MailboxType type);
+void        notify_dump_account  (struct NotifyCallback *nc);
+void        notify_dump_color    (struct NotifyCallback *nc);
+void        notify_dump_command  (struct NotifyCallback *nc);
+void        notify_dump_config   (struct NotifyCallback *nc);
+void        notify_dump_context  (struct NotifyCallback *nc);
+void        notify_dump_email    (struct NotifyCallback *nc);
+void        notify_dump_global   (struct NotifyCallback *nc);
+void        notify_dump_mailbox  (struct NotifyCallback *nc);
 
 // Parse Set
 void test_parse_set(void);
