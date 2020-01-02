@@ -73,6 +73,7 @@
 #include "protos.h"
 #include "send.h"
 #include "sendlib.h"
+#include "tracker.h"
 #include "version.h"
 #include "ncrypt/lib.h"
 #ifdef ENABLE_NLS

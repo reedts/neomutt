@@ -62,6 +62,8 @@
 #include "options.h"
 #include "protos.h"
 #include "sort.h"
+#include "tracker.h"
+#include "version.h"
 #ifdef USE_HCACHE
 #include "hcache/lib.h"
 #endif
@@ -221,6 +223,9 @@ static int execute_commands(struct ListHead *p)
   mutt_buffer_pool_release(&token);
   mutt_buffer_pool_release(&err);
 
+  // printf("POP\n");
+  ct_pop(); // The 'account' command stops at the end of the file
+  // ct_dump();
   return rc;
 }
 
