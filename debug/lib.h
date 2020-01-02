@@ -43,6 +43,20 @@ struct MuttWindow;
 void show_backtrace(void);
 #endif
 
+// Account
+int              account_observer  (struct NotifyCallback *nc);
+void             dump_accounts2    (void);
+void             dump_config_notify(const char *level, struct NotifyCallback *nc);
+void             dump_inherited    (struct ConfigSet *cs);
+void             dump_one          (struct Buffer *tmp, struct Buffer *value, const char *name);
+void             dump_vars         (const char *account);
+struct HashElem *get_he            (struct ConfigSet *cs, const char *name);
+void             kill_accounts     (void);
+int              mailbox_observer  (struct NotifyCallback *nc);
+int              neomutt_observer  (struct NotifyCallback *nc);
+void             test_config_notify(struct NeoMutt *n);
+void             test_parse_set2   (int argc, char *argv[]);
+
 // Graphviz
 #ifdef USE_DEVEL_GRAPHVIZ
 void dump_graphviz(const char *title);

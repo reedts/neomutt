@@ -32,6 +32,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "mutt/lib.h"
+#include "config/lib.h"
 #include "subset.h"
 #include "set.h"
 
@@ -400,4 +401,65 @@ int cs_subset_str_string_set(const struct ConfigSubset *sub, const char *name,
   struct HashElem *he = cs_subset_create_inheritance(sub, name);
 
   return cs_subset_he_string_set(sub, he, value, err);
+}
+
+const char *subset_get_scope(enum ConfigScope scope)
+{
+  switch (scope)
+  {
+    case SET_SCOPE_NEOMUTT:
+      return "neomutt";
+    case SET_SCOPE_ACCOUNT:
+      return "account";
+    case SET_SCOPE_MAILBOX:
+      return "mailbox";
+    default:
+      return "unknown";
+  }
+}
+
+void subset_dump(const struct ConfigSubset *sub)
+{
+  for (; sub; sub = sub->parent)
+  {
+    printf("%s: '%s' (%ld)", subset_get_scope(sub->scope), NONULL(sub->name),
+           observer_count(sub->notify));
+    if (sub->parent)
+      printf(" --> ");
+  }
+  printf("\n");
+}
+
+void subset_dump_var2(const struct ConfigSubset *sub, const char *var)
+{
+  if (!sub)
+    return;
+
+  subset_dump_var2(sub->parent, var);
+  if (sub->parent)
+    printf(", ");
+
+  struct HashElem *he = cs_subset_lookup(sub, var);
+  if (he)
+    printf("\033[1;32m");
+  else
+    printf("\033[1;31m");
+
+  printf("%s:%s", NONULL(sub->name), var);
+
+  printf("\033[0m");
+
+  intptr_t value = cs_he_native_get(sub->cs, he, NULL);
+  if (value == INT_MIN)
+    printf("[X]");
+  else if (DTYPE(he->type) != 0)
+    printf("=%ld", value);
+  else
+    printf("(%ld)", value);
+}
+
+void subset_dump_var(const struct ConfigSubset *sub, const char *var)
+{
+  subset_dump_var2(sub, var);
+  printf("\n");
 }

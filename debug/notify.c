@@ -178,8 +178,9 @@ void notify_dump_config(struct NotifyCallback *nc)
   struct EventConfig *ev_c = nc->event_data;
 
   struct Buffer value = mutt_buffer_make(128);
-  cs_he_string_get(ev_c->sub->cs, ev_c->he, &value);
-  mutt_debug(LL_DEBUG1, "\tConfig: %s %s = %s\n",
+  // cs_he_string_get(ev_c->sub->cs, ev_c->he, &value);
+  // mutt_debug(LL_DEBUG1, "\tConfig: %s %s = %s\n",
+  mutt_debug(LL_DEBUG1, "Config: %s %s = %s\n",
              get_config_type(nc->event_subtype), ev_c->name, mutt_b2s(&value));
   mutt_buffer_dealloc(&value);
 }
@@ -222,7 +223,8 @@ void notify_dump_mailbox(struct NotifyCallback *nc)
 
 int debug_notify_observer(struct NotifyCallback *nc)
 {
-  mutt_debug(LL_DEBUG1, "\033[1;31mNotification:\033[0m %s\n", get_event_type(nc->event_type));
+  // mutt_debug(LL_DEBUG1, "\033[1;31mNotification:\033[0m %s\n", get_event_type(nc->event_type));
+  // mutt_debug(LL_DEBUG1, "Notification: %s\n", get_event_type(nc->event_type));
 
   switch (nc->event_type)
   {
@@ -257,7 +259,7 @@ int debug_notify_observer(struct NotifyCallback *nc)
       break;
   }
 
-  mutt_debug(LL_DEBUG1, "\tGlobal Data: %p\n", nc->global_data);
+  // mutt_debug(LL_DEBUG1, "\tGlobal Data: %p\n", nc->global_data);
 
   return 0;
 }

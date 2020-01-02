@@ -19,10 +19,10 @@
 
 // #define GV_HIDE_CONTEXT
 #define GV_HIDE_CONTEXT_CONTENTS
-// #define GV_HIDE_MBOX
-// #define GV_HIDE_NEOMUTT
+#define GV_HIDE_MBOX
+#define GV_HIDE_NEOMUTT
 // #define GV_HIDE_CONFIG
-// #define GV_HIDE_MDATA
+#define GV_HIDE_MDATA
 
 void dot_type_bool(FILE *fp, const char *name, bool val)
 {
@@ -96,6 +96,7 @@ void dot_type_string(FILE *fp, const char *name, const char *str)
     mutt_str_strfcpy(buf, str, sizeof(buf));
     dot_type_string_escape(buf, sizeof(buf));
   }
+  buf[20] = '\0';
 
   bool quoted = ((buf[0] != '[') && (buf[0] != '*'));
 

@@ -96,4 +96,7 @@ int      cs_subset_str_string_set(const struct ConfigSubset *sub, const char *na
 int               elem_list_sort(const void *a, const void *b);
 struct HashElem **get_elem_list(struct ConfigSet *cs);
 
+void subset_dump    (const struct ConfigSubset *sub);
+void subset_dump_var(const struct ConfigSubset *sub, const char *var);
+
 #endif /* MUTT_CONFIG_SUBSET_H */

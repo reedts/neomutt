@@ -1730,6 +1730,7 @@ int mutt_index_menu(struct MuttWindow *dlg)
       {
 #ifdef USE_DEVEL_GRAPHVIZ
         dump_graphviz("index");
+        break;
 #endif
         buf[0] = '\0';
         if ((mutt_get_field("Query: ", buf, sizeof(buf), MUTT_COMP_NO_FLAGS) != 0) ||

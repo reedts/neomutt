@@ -752,6 +752,14 @@ int main(int argc, char *argv[], char *envp[])
 
   if (batch_mode)
   {
+    // dump_accounts2();
+    // kill_accounts();
+    // test_parse_set2(argc, argv);
+    // dump_inherited(cs);
+    // ct_dump();
+#ifdef USE_DEVEL_GRAPHVIZ
+    dump_graphviz("batch");
+#endif
     goto main_ok; // TEST22: neomutt -B
   }
 
