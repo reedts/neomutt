@@ -140,6 +140,9 @@ ALLOBJS+=	$(LIBGUIOBJS)
 ###############################################################################
 # libdebug
 LIBDEBUG=	libdebug.a
+@if USE_DEBUG_ACCOUNT
+LIBDEBUGOBJS+=	debug/account.o debug/subset.o
+@endif
 @if HAVE_LIBUNWIND
 LIBDEBUGOBJS+=	debug/backtrace.o
 @endif
