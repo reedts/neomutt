@@ -25,6 +25,8 @@
 
 #include <stdint.h>
 
+struct Account;
+
 /**
  * enum ConnAccountField - Login credentials
  */
@@ -65,6 +67,7 @@ struct ConnAccount
   unsigned char type;     ///< Connection type, e.g. #MUTT_ACCT_TYPE_IMAP
   MuttAccountFlags flags; ///< Which fields are initialised, e.g. #MUTT_ACCT_USER
   const char *service;    ///< Name of the service, e.g. "imap"
+  struct Account *account; ///< Parent Account for this Connection
 
   ca_get_field_t get_field; ///< Function to get some data
 };
