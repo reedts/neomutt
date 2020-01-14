@@ -788,7 +788,7 @@ static int main_change_folder(struct Menu *menu, int op, struct Mailbox *m,
   bool free_m = false;
   if (!m)
   {
-    m = mx_path_resolve(buf);
+    m = mx_path_resolve(buf, C_Folder);
     free_m = true;
   }
   Context = mx_mbox_open(m, flags);
@@ -2338,7 +2338,7 @@ int mutt_index_menu(struct MuttWindow *dlg)
         if (nm_url_from_query(NULL, buf, sizeof(buf)))
         {
           // Create mailbox and set name.
-          struct Mailbox *m_new_vfolder = mx_path_resolve(buf);
+          struct Mailbox *m_new_vfolder = mx_path_resolve(buf, C_Folder);
           m_new_vfolder->name = query_unencoded;
           query_unencoded = NULL;
 
@@ -2509,7 +2509,7 @@ int mutt_index_menu(struct MuttWindow *dlg)
         }
 
         if (!m)
-          m = mx_mbox_find2(mutt_b2s(folderbuf));
+          m = mx_mbox_find2(mutt_b2s(folderbuf), C_Folder);
 
         main_change_folder(menu, op, m, folderbuf->data, folderbuf->dsize,
                            &oldcount, &index_hint, &pager_return);
