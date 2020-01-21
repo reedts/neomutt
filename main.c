@@ -310,6 +310,20 @@ static bool get_user_info(struct ConfigSet *cs)
  */
 int main(int argc, char *argv[], char *envp[])
 {
+#if 0
+  int nm_path2_compare(struct Path *path1, struct Path *path2);
+  if (argc != 3)
+    return 1;
+  struct Path path1 = { 0 };
+  struct Path path2 = { 0 };
+  path1.orig = argv[1];
+  path1.canon = argv[1];
+  path2.orig = argv[2];
+  path2.canon = argv[2];
+  int rc3 = nm_path2_compare(&path1, &path2);
+  printf("%s\n%s\n%d\n", path1.canon, path2.canon, rc3);
+  return 0;
+#endif
   char *subject = NULL;
   char *include_file = NULL;
   char *draft_file = NULL;
