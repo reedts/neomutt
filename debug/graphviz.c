@@ -464,17 +464,17 @@ void dot_mailbox(FILE *fp, struct Mailbox *m, struct ListHead *links)
 
   if ((m->magic == MUTT_IMAP) || (m->magic == MUTT_POP))
   {
-    dot_path_imap(buf, sizeof(buf), mutt_b2s(&m->pathbuf));
-    dot_type_string(fp, "pathbuf", buf);
-    dot_path_imap(buf, sizeof(buf), m->realpath);
-    dot_type_string(fp, "realpath", buf);
+    dot_path_imap(buf, sizeof(buf), m->path->orig);
+    dot_type_string(fp, "path-&gt;orig", buf);
+    dot_path_imap(buf, sizeof(buf), m->path->canon);
+    dot_type_string(fp, "path-&gt;canon", buf);
   }
   else
   {
-    dot_path_fs(buf, sizeof(buf), mutt_b2s(&m->pathbuf));
-    dot_type_string(fp, "pathbuf", buf);
-    dot_path_fs(buf, sizeof(buf), m->realpath);
-    dot_type_string(fp, "realpath", buf);
+    dot_path_fs(buf, sizeof(buf), m->path->orig);
+    dot_type_string(fp, "path-&gt;orig", buf);
+    dot_path_fs(buf, sizeof(buf), m->path->canon);
+    dot_type_string(fp, "path-&gt;canon", buf);
   }
 
 #ifdef GV_HIDE_MDATA

@@ -723,7 +723,7 @@ static int main_change_folder(struct Menu *menu, int op, struct Mailbox *m,
     *pager_return = false;
 
   /* keepalive failure in mutt_enter_fname may kill connection. */
-  if (Context && Context->mailbox && (mutt_buffer_is_empty(&Context->mailbox->pathbuf)))
+  if (Context && Context->mailbox && !Context->mailbox->path->orig)
     ctx_free(&Context);
 
   if (Context && Context->mailbox)
@@ -733,8 +733,8 @@ static int main_change_folder(struct Menu *menu, int op, struct Mailbox *m,
     int monitor_remove_rc = mutt_monitor_remove(NULL);
 #endif
 #ifdef USE_COMPRESSED
-    if (Context->mailbox->compress_info && (Context->mailbox->realpath[0] != '\0'))
-      new_last_folder = mutt_str_strdup(Context->mailbox->realpath);
+    if (Context->mailbox->compress_info && (Context->mailbox->path->canon[0] != '\0'))
+      new_last_folder = mutt_str_strdup(Context->mailbox->path->canon);
     else
 #endif
       new_last_folder = mutt_str_strdup(mailbox_path(Context->mailbox));
@@ -1207,7 +1207,7 @@ int mutt_index_menu(struct MuttWindow *dlg)
       int check = mx_mbox_check(Context->mailbox, &index_hint);
       if (check < 0)
       {
-        if (!Context->mailbox || (mutt_buffer_is_empty(&Context->mailbox->pathbuf)))
+        if (!Context->mailbox || !Context->mailbox->path->orig)
         {
           /* fatal error occurred */
           ctx_free(&Context);
@@ -1714,6 +1714,23 @@ int mutt_index_menu(struct MuttWindow *dlg)
 
       case OP_SHOW_LOG_MESSAGES:
       {
+#ifdef USE_DEVEL_GRAPHVIZ
+        dump_graphviz("index");
+#endif
+        buf[0] = '\0';
+        if ((mutt_get_field("Query: ", buf, sizeof(buf), MUTT_COMP_NO_FLAGS) != 0) ||
+            !buf[0])
+        {
+          break;
+        }
+
+        struct Path path = { 0 };
+        path.orig = mutt_str_strdup(buf);
+        // imap_path2_tidy(&path);
+        mx_path2_resolve(&path);
+        mutt_message("%s %s", buf, path.orig);
+
+        break;
         char tempfile[PATH_MAX];
         mutt_mktemp(tempfile, sizeof(tempfile));
 
@@ -1725,9 +1742,6 @@ int mutt_index_menu(struct MuttWindow *dlg)
         }
 
         log_queue_save(fp);
-#ifdef USE_DEVEL_GRAPHVIZ
-        dump_graphviz("index");
-#endif
         mutt_file_fclose(&fp);
 
         mutt_do_pager("messages", tempfile, MUTT_PAGER_LOGS, NULL);
@@ -2067,8 +2081,7 @@ int mutt_index_menu(struct MuttWindow *dlg)
         }
 
         /* check for a fatal error, or all messages deleted */
-        if (Context && Context->mailbox &&
-            mutt_buffer_is_empty(&Context->mailbox->pathbuf))
+        if (Context && Context->mailbox && !Context->mailbox->path->orig)
           ctx_free(&Context);
 
         /* if we were in the pager, redisplay the message */
@@ -2410,8 +2423,8 @@ int mutt_index_menu(struct MuttWindow *dlg)
         else
           cp = _("Open mailbox");
 
-        if ((op == OP_MAIN_NEXT_UNREAD_MAILBOX) && Context && Context->mailbox &&
-            !mutt_buffer_is_empty(&Context->mailbox->pathbuf))
+        if ((op == OP_MAIN_NEXT_UNREAD_MAILBOX) && Context &&
+            Context->mailbox && Context->mailbox->path->orig)
         {
           mutt_buffer_strcpy(folderbuf, mailbox_path(Context->mailbox));
           mutt_buffer_pretty_mailbox(folderbuf);
@@ -2437,7 +2450,7 @@ int mutt_index_menu(struct MuttWindow *dlg)
         else
         {
           if (C_ChangeFolderNext && Context && Context->mailbox &&
-              !mutt_buffer_is_empty(&Context->mailbox->pathbuf))
+              Context->mailbox->path->orig)
           {
             mutt_buffer_strcpy(folderbuf, mailbox_path(Context->mailbox));
             mutt_buffer_pretty_mailbox(folderbuf);
