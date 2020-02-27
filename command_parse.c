@@ -483,7 +483,7 @@ int source_rc(const char *rcfile_path, struct Buffer *err)
     return -1;
   }
 
-  printf("\033[1;32mfile: %s\033[0m\n", rcfile_path);
+  // printf("\033[1;32mfile: %s\033[0m\n", rcfile_path);
   ct_push_top(); // Inherit the 'account' of the parent config file
 
   mutt_buffer_init(&token);
@@ -561,7 +561,7 @@ int source_rc(const char *rcfile_path, struct Buffer *err)
     FREE(&np);
   }
 
-  printf("\033[1;32mend of file: %s\033[0m\n", rcfile_path);
+  // printf("\033[1;32mend of file: %s\033[0m\n", rcfile_path);
   ct_pop(); // The 'account' command stops at the end of the file
   return rc;
 }
@@ -1409,7 +1409,7 @@ enum CommandResult parse_set(struct Buffer *buf, struct Buffer *s,
             mutt_buffer_dealloc(&scratch);
           }
 
-          printf("\033[1;32mSET: %s = %s\033[0m\n", he->key.strkey, buf->data);
+          // printf("\033[1;32mSET: %s = %s\033[0m\n", he->key.strkey, buf->data);
           rc = cs_subset_he_string_set(sub, he, buf->data, err);
           if (CSR_RESULT(rc) != CSR_SUCCESS)
             return MUTT_CMD_ERROR;
