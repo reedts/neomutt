@@ -29,6 +29,7 @@
 #include "config.h"
 #include "mutt/lib.h"
 #include "core/lib.h"
+#include "tracker.h"
 
 /**
  * struct ScopePair - A list of Account,Mailbox pairs
@@ -71,6 +72,7 @@ struct Account *ct_get_account(void)
  */
 void ct_set_account(struct Account *a)
 {
+  printf("\033[1;31mset account: %s\033[0m\n", a ? a->name : "[NONE]");
   struct ScopePair *sp = STAILQ_FIRST(&ConfigStack);
   if (!sp)
   {
@@ -81,7 +83,11 @@ void ct_set_account(struct Account *a)
   if (!sp->account && !a)
     mutt_error("WARN - no active account1");
   else
+  {
     sp->account = a;
+    sp->mailbox = NULL;
+  }
+  ct_dump();
 }
 
 /**
@@ -109,12 +115,14 @@ struct Mailbox *ct_get_mailbox(void)
  */
 void ct_set_mailbox(struct Mailbox *m)
 {
+  printf("\033[1;34mset mailbox: %s\033[0m\n", m ? m->name : "[NONE]");
   struct ScopePair *sp = STAILQ_FIRST(&ConfigStack);
   if (!sp)
     return;
 
   if (sp->account)
     sp->mailbox = m;
+  ct_dump();
 }
 
 /**
@@ -125,6 +133,7 @@ void ct_set_mailbox(struct Mailbox *m)
  */
 void ct_push_top(void)
 {
+  printf("\033[1;31mpush top\033[0m\n");
   struct ScopePair *sp_dup = mutt_mem_calloc(1, sizeof(*sp_dup));
 
   struct ScopePair *sp = STAILQ_FIRST(&ConfigStack);
@@ -135,6 +144,7 @@ void ct_push_top(void)
   }
 
   STAILQ_INSERT_HEAD(&ConfigStack, sp_dup, entries);
+  ct_dump();
 }
 
 /**
@@ -145,6 +155,7 @@ void ct_push_top(void)
  */
 void ct_pop(void)
 {
+  printf("\033[1;31mpop\033[0m\n");
   struct ScopePair *sp = STAILQ_FIRST(&ConfigStack);
   if (!sp)
   {
@@ -154,6 +165,7 @@ void ct_pop(void)
 
   STAILQ_REMOVE_HEAD(&ConfigStack, entries);
   FREE(&sp);
+  ct_dump();
 }
 
 /**
